@@ -2,6 +2,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      favStreams: [],
       streamData: window.fakeData.featured,
       buttonValue: ''
     };
@@ -10,10 +11,10 @@ class App extends React.Component {
   render() {
     return (
     <div>
-      {this.state.streamData.map((stream) => {
-        return <TwitchLinks key={} stream={stream}></TwitchLinks>
+      {this.state.streamData.map((streamLink) => {
+        return <TwitchLink key={streamLink.stream._id} stream={streamLink}></TwitchLink>
       })}
-      <input value={this.state.buttonValue}></input>
+      <input></input>
       <button>Submit Your Favorite Stream</button>
     </div>
     );
@@ -26,6 +27,7 @@ class App extends React.Component {
       type: 'GET',
       success: (data) => {
         console.log(data);
+        this.setState({favStreams: data})
       },
       error: function(data) {
         console.log('Did not receive:' + data);
