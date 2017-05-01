@@ -22,7 +22,17 @@ app.get('/', function (req, res) {
 })
 
 app.post('/', function (req, res) {
+  var streamTitle = req.body.title;
+  var streamUrl = req.body.url;
 
+  new FavStreams ({title: streamTitle, url: streamUrl})
+    .save(function(err){
+        if(err){
+          res.status(400).send('stream not saved');
+        } else {
+          res.status(201).send('stream saved to database');
+        }
+      });
 })
 
 app.listen(3030, function(){
