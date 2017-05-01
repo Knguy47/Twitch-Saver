@@ -17,28 +17,28 @@ Once the project moves into development, the press release can be used as a touc
  -->
  
 ## Heading ##
-  > Name the product in a way the reader (i.e. your target customers) will understand.
+  > Twitch Stream Favorites
 
 ## Sub-Heading ##
-  > Describe who the market for the product is and what benefit they get. One sentence only underneath the title.
+  > Gamers who just want to watch their favorite streams only
 
 ## Summary ##
-  > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.
+  > The web app will allow the client to save their favorite twitch streams and stream them.
 
 ## Problem ##
-  > Describe the problem your product solves.
+  > Twitch site can be cumbersome if you already know what you want to watch and don't like to view the chat.
 
 ## Solution ##
-  > Describe how your product elegantly solves the problem.
+  > Save the streams you visit in another app that removes the extraneous features that Twitch offers
 
 ## Quote from You ##
-  > A quote from a spokesperson in your company.
+  > "EZ MODE"
 
 ## How to Get Started ##
-  > Describe how easy it is to get started.
+  > The first feature and MVP of this project is just to allow users to save their favorite twitch URLs into the database
 
 ## Customer Quote ##
-  > Provide a quote from a hypothetical customer that describes how they experienced the benefit.
+  > "Love watching my fav streams quickly and on the fly"
 
 ## Closing and Call to Action ##
-  > Wrap it up and give pointers where the reader should go next.
+  > If you are looking build your own app with twitch look at https://dev.twitch.tv/ for docs
