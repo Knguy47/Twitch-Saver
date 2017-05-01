@@ -1,7 +1,11 @@
 var mongoose = require('mongoose');
-
+var autoIncrement = require('mongoose-auto-increment');
 var Schema = mongoose.Schema;
-mongoose.connect('mongodb://localhost/twitchfavs');
+
+mongoose.Promise = global.Promise;
+
+autoIncrement.initialize(mongoose.connect('mongodb://localhost/twitchfavs'));
+
 
 var db = mongoose.connection;
 
