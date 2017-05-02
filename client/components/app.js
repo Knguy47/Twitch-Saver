@@ -61,13 +61,11 @@ class App extends React.Component {
       dataType: 'json',
       type: 'GET',
       success: (data) => {
-        console.log(data)
         var mappedData = data.map((stream) =>{
           var newStream = stream.stream
           newStream._id = stream._id;
           return newStream
         });
-        console.log(JSON.stringify(mappedData));
         this.setState({favStreams: mappedData});
       },
       error: (data) => {
