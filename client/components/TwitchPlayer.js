@@ -6,14 +6,17 @@ class TwitchPlayer extends React.Component {
   
   render() {
     return (
-    <iframe
-        src={"http://player.twitch.tv/?channel="+ this.props.channel}
-        height={500}
-        width={600}
-        frameBorder={0}
-        scrolling="no"
-        allowFullScreen="true">
-    </iframe>
+    <div>
+      <h1>You are watching {this.props.channel}</h1>
+      <iframe className="player"
+          src={"http://player.twitch.tv/?channel="+ this.props.channel}
+          height={600}
+          width={1000}
+          frameBorder={0}
+          scrolling="no"
+          allowFullScreen="true">
+      </iframe>
+    </div>
     );
   }
 

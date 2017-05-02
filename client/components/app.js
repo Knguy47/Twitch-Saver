@@ -2,7 +2,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentChannel: 'summit1g',
+      currentChannel: '',
       favStreams: [],
       topStreamData: [],
       inputValue: ''
@@ -16,14 +16,17 @@ class App extends React.Component {
   render() {
     //create a player only if a video exist
     var player;
+    var chat;
 
-    if(this.state.topStreamData.length > 1){
+    if(this.state.topStreamData.length > 1) {
      player = <TwitchPlayer channel={this.state.currentChannel}></TwitchPlayer>  
+     chat =  <TwitchChat channel={this.state.currentChannel}></TwitchChat>  
     }
     
     return (
     <div>
       {player}
+      {chat}
       <h3>TOP 5 STREAMS</h3>
         {this.state.topStreamData.map((streamLink) => {
           return <TwitchLink key={streamLink.stream._id} stream={streamLink} onFavorite={this.handleFavorite} onPlay={this.handlePlay}></TwitchLink>
@@ -46,7 +49,8 @@ class App extends React.Component {
         "Client-Id":"9r4gqveimjjp6yo5rwbxf7i6hby75l"
       },
       success: (data) => {
-        this.setState({topStreamData: data.featured})
+        this.setState({topStreamData: data.featured});
+        this.setState({currentChannel: data.featured[0].stream.channel.name});
       },
       error: (data) => {
         console.log('Did not receive:' + data);
@@ -79,10 +83,6 @@ class App extends React.Component {
     this.fetchTop();
   }
   
-  componentWillReceiveProps(){
-     this.setState({currentChannel: this.state.topStreamData[0].stream.channel.name});
-  }
-
   //Add Favorite Stream to Database
   handleFavorite(stream){
     $.ajax({

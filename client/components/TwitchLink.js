@@ -10,9 +10,11 @@ class TwitchLink extends React.Component {
   render() {
     return (
     <div className='twitchlinks'>
+        
       <a href= {this.props.stream.stream.channel.url} target="_blank">
-        {this.props.stream.stream.channel.url}
+        <img src={this.props.stream.stream.preview.small}></img>
       </a>
+      {this.props.stream.stream.game}
       <div>
         <button onClick={this.handlePlay}>Play Stream</button>
         <button onClick={this.handleAddToFavs}>Add to Favorites</button>

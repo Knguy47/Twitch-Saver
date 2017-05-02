@@ -21,10 +21,7 @@ app.get('/favstreams', function (req, res) {
   });
 });
 
-
-
 app.post('/favstreams', function (req, res) {
-  console.log(req.body);
   var addStream = req.body;
   new FavStreams ({stream: addStream})
     .save(function(err){
@@ -37,16 +34,14 @@ app.post('/favstreams', function (req, res) {
 });
 
 app.delete('/favstreams', function (req, res) {
- 
   var deleteStream = req.body._id;
- console.log(deleteStream);
-  FavStreams.remove({_id: deleteStream}, function(err) {
-    if(err) {
-      res.status(400).send('You messed up');
-    } else {
-      res.status(200).send('Stream Deleted');
-    }
-  });
+    FavStreams.remove({_id: deleteStream}, function(err) {
+      if(err) {
+        res.status(400).send('You messed up');
+      } else {
+        res.status(200).send('Stream Deleted');
+      }
+    });
 });
 
 app.listen(3030, function(){
