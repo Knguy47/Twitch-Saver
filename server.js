@@ -23,6 +23,7 @@ app.get('/favstreams', function (req, res) {
 app.post('/favstreams', function (req, res) {
   var streamTitle = req.body.title;
   var streamUrl = req.body.url;
+  console.log(req.body.title);
 
   new FavStreams ({title: streamTitle, url: streamUrl})
     .save(function(err){

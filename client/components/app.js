@@ -3,24 +3,46 @@ class App extends React.Component {
     super(props);
     this.state = {
       favStreams: [],
-      streamData: window.fakeData.featured,
-      buttonValue: ''
+      topStreamData: window.fakeData.featured,
+      inputValue: ''
     };
+
+    this.handleButtonClick = this.handleButtonClick.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
   };
   
   render() {
     return (
     <div>
-      {this.state.streamData.map((streamLink) => {
-        return <TwitchLink key={streamLink.stream._id} stream={streamLink}></TwitchLink>
-      })}
-      <input></input>
-      <button>Submit Your Favorite Stream</button>
+      <h3>TOP 5 STREAMS</h3>
+        {this.state.topStreamData.map((streamLink) => {
+          return <TwitchLink key={streamLink.stream._id} stream={streamLink}></TwitchLink>
+        })}
+      <input onChange={this.handleInputChange} value={this.state.inputValue}></input>
+      <button onClick={this.handleButtonClick}>Submit Your Favorite Stream</button>
     </div>
     );
   }
   //fetch the data from the DB
-  fetch(){
+  fetchTop() {
+    $.ajax({
+      url: 'https://api.twitch.tv/kraken/streams/featured?limit=5',
+      dataType: 'json',
+      type: 'GET',
+      headers: {
+        "Accept":"application/vnd.twitchtv.v5+json",
+        "Client-Id":"9r4gqveimjjp6yo5rwbxf7i6hby75l"
+      },
+      success: (data) => {
+        console.log(data);
+        this.setState({topStreamData: data.featured})
+      },
+      error: (data) => {
+        console.log('Did not receive:' + data);
+      }
+    });
+  }
+  fetch() {
     $.ajax({
       url: 'http://127.0.0.1:3030/favstreams',
       dataType: 'json',
@@ -29,15 +51,41 @@ class App extends React.Component {
         console.log(data);
         this.setState({favStreams: data})
       },
-      error: function(data) {
+      error: (data) => {
         console.log('Did not receive:' + data);
       }
     });
   }
+
   componentDidMount() {
     this.fetch();
+    this.fetchTop();
   }
 
+  handleButtonClick(event) {
+    var data = {
+      title: this.state.inputValue,
+      url: this.state.inputValue
+    }
+    
+    $.ajax({
+        url: 'http://127.0.0.1:3030/favstreams',
+        data: data,
+        type: 'POST',
+        success: (data) => {
+          this.setState({inputValue: ''});
+          this.fetch();
+        },
+        error: (data) => {
+          this.setState({inputValue: ''});
+          console.log('Did not receive:' + data);
+        }
+    });
+  }
+
+  handleInputChange(event) {
+    this.setState({inputValue: event.target.value});
+  }
 }
 
 window.App = App;
