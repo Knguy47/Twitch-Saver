@@ -46,13 +46,14 @@ class App extends React.Component {
       type: 'GET',
       headers: {
         "Accept":"application/vnd.twitchtv.v5+json",
-        "Client-Id":"9r4gqveimjjp6yo5rwbxf7i6hby75l"
+        "Client-Id": somethingsomething 
       },
       success: (data) => {
         this.setState({topStreamData: data.featured});
         this.setState({currentChannel: data.featured[0].stream.channel.name});
       },
       error: (data) => {
+        console.log(window)
         console.log('Did not receive:' + data);
       }
     });
@@ -116,7 +117,6 @@ class App extends React.Component {
 
   //Change Current Player
   handlePlay(stream){
-    console.log(stream.stream.channel.name);
     this.setState({currentChannel: stream.stream.channel.name});
   }
 }
