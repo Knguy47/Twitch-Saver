@@ -1,4 +1,5 @@
 var express = require('express');
+var request = require('request');
 var db = require('./database/data');
 var bodyParser = require('body-parser');
 var path = require('path');
@@ -9,7 +10,17 @@ var FavStreams = require('./database/Model/favStreams.js');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '/public')));
-// respond with "hello world" when a GET request is made to the homepage
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Methods", "OPTIONS, DELETE, POST, GET");
+  next();
+});
+
+app.get('/login', function(req, res){
+  res.redirect("https://api.twitch.tv/kraken/oauth2/authorize?response_type=code&client_id=9r4gqveimjjp6yo5rwbxf7i6hby75l&redirect_uri=http://localhost:3030/&scope=chat_login&state=encodedededed")
+})
 
 app.get('/favstreams', function (req, res) {
   FavStreams.find(function(err, streams) {

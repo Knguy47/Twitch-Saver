@@ -31,6 +31,7 @@
     "path": "^0.12.7",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
-    "react-hammerjs": "^0.5.0"
+    "react-hammerjs": "^0.5.0",
+    "request": "^2.81.0"
   }
 }

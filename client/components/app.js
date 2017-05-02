@@ -39,22 +39,29 @@ class App extends React.Component {
     );
   }
   //Fetch the data from the Twitch 
-  fetchTop() {
+  fetchTwitch(query) {
+    var options = {
+      queryString: query
+    }
+    
     $.ajax({
-      url: 'https://api.twitch.tv/kraken/streams/featured?limit=5',
+      url: 'https://api.twitch.tv/kraken/streams/' + options.queryString,
       dataType: 'json',
       type: 'GET',
       headers: {
-        "Accept":"application/vnd.twitchtv.v5+json",
-        "Client-Id": somethingsomething 
+        "Client-Id": somethingsomething,
+        "Accept":"application/vnd.twitchtv.v5+json"
       },
       success: (data) => {
-        this.setState({topStreamData: data.featured});
-        this.setState({currentChannel: data.featured[0].stream.channel.name});
+        if(options.queryString === "featured?limit=5") {
+          this.setState({topStreamData: data.featured});
+          this.setState({currentChannel: data.featured[0].stream.channel.name});
+        }
+          console.log(data);
       },
       error: (data) => {
-        console.log(window)
-        console.log('Did not receive:' + data);
+        console.log('https://api.twitch.tv/kraken/streams/' + options.queryString)
+        console.log('Did not receive:' + JSON.stringify(data));
       }
     });
   }
@@ -71,7 +78,9 @@ class App extends React.Component {
           newStream._id = stream._id;
           return newStream
         });
+       
         this.setState({favStreams: mappedData});
+        // this.fetchTwitch(this.state.favStreams[0].stream.channel.name);
       },
       error: (data) => {
         console.log('Did not receive:' + data);
@@ -81,7 +90,7 @@ class App extends React.Component {
 
   componentDidMount() {
     this.fetch();
-    this.fetchTop();
+    this.fetchTwitch("featured?limit=5");
   }
   
   //Add Favorite Stream to Database
