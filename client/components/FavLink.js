@@ -1,9 +1,8 @@
-class TwitchLink extends React.Component {
+class FavLink extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
 
-    this.handleAddToFavs = this.handleAddToFavs.bind(this);
     this.handlePlay = this.handlePlay.bind(this);
   };
   
@@ -14,20 +13,16 @@ class TwitchLink extends React.Component {
         {this.props.stream.stream.channel.url}
       </a>
       <div>
-        <button onClick={this.handlePlay}>Play Stream</button>
-        <button onClick={this.handleAddToFavs}>Add to Favorites</button>
+       <button onClick={this.handlePlay}>Play Stream</button>
+       <button>Remove From Favorites</button>
       </div>
     </div>
     );
   }
+
   handlePlay(){
     this.props.onPlay(this.props.stream);
   }
-  
-  handleAddToFavs (){
-    this.props.onFavorite(this.props.stream);
-  }
-
 }
 
-window.TwitchLink = TwitchLink;
+window.FavLink = FavLink;

@@ -2,21 +2,23 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      currentChannel: '',
       favStreams: [],
       topStreamData: [],
       inputValue: ''
     };
 
-    this.handleButtonClick = this.handleButtonClick.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
     this.handleFavorite = this.handleFavorite.bind(this);
+    this.handlePlay = this.handlePlay.bind(this);
   };
   
   render() {
+    //create a player only if a video exist
     var player;
 
     if(this.state.topStreamData.length > 1){
-     player = <TwitchPlayer channel={this.state.topStreamData[0].stream.channel.name}></TwitchPlayer>  
+      this.setState({currentChannel: this.state.topStreamData[0].stream.channel.name})
+     player = <TwitchPlayer channel={this.state.currentChannel}></TwitchPlayer>  
     }
     
     return (
@@ -24,14 +26,16 @@ class App extends React.Component {
       {player}
       <h3>TOP 5 STREAMS</h3>
         {this.state.topStreamData.map((streamLink) => {
-          return <TwitchLink key={streamLink.stream._id} stream={streamLink} onFavorite={this.handleFavorite}></TwitchLink>
+          return <TwitchLink key={streamLink.stream._id} stream={streamLink} onFavorite={this.handleFavorite} onPlay={this.handlePlay}></TwitchLink>
         })}
-      <input onChange={this.handleInputChange} value={this.state.inputValue}></input>
-      <button onClick={this.handleButtonClick}>Submit Your Favorite Stream</button>
+      <h3>FAVORITE STREAMS</h3>
+        {this.state.favStreams.map((streamFavs) =>{
+          return <FavLink key={streamFavs.stream._id} stream={streamFavs} onPlay={this.handlePlay}></FavLink>
+        })}
     </div>
     );
   }
-  //fetch the data from the DB
+  //fetch the data from the Twitch 
   fetchTop() {
     $.ajax({
       url: 'https://api.twitch.tv/kraken/streams/featured?limit=5',
@@ -42,7 +46,6 @@ class App extends React.Component {
         "Client-Id":"9r4gqveimjjp6yo5rwbxf7i6hby75l"
       },
       success: (data) => {
-        console.log(data);
         this.setState({topStreamData: data.featured})
       },
       error: (data) => {
@@ -51,14 +54,18 @@ class App extends React.Component {
     });
   }
 
+  //fetch the data from the DB
   fetch() {
     $.ajax({
       url: 'http://127.0.0.1:3030/favstreams',
       dataType: 'json',
       type: 'GET',
       success: (data) => {
-        console.log(data);
-        this.setState({favStreams: data})
+        var mappedData = data.map((stream) =>{
+          return stream.stream;
+        });
+        console.log(mappedData);
+        this.setState({favStreams: mappedData})
       },
       error: (data) => {
         console.log('Did not receive:' + data);
@@ -71,50 +78,27 @@ class App extends React.Component {
     this.fetchTop();
   }
 
-  handleButtonClick(event) {
-    var data = {
-      title: this.state.inputValue,
-      url: this.state.inputValue
-    }
-    
-    $.ajax({
-        url: 'http://127.0.0.1:3030/favstreams',
-        data: data,
-        type: 'POST',
-        success: (data) => {
-          this.setState({inputValue: ''});
-          this.fetch();
-        },
-        error: (data) => {
-          this.setState({inputValue: ''});
-          console.log('Did not receive:' + data);
-        }
-    });
-  }
-
-  handleInputChange(event) {
-    this.setState({inputValue: event.target.value});
-  }
-
+  //Add Favorite Stream to Database
   handleFavorite(stream){
-    var data = {
-      title: stream.something,
-      url: stream.something
-    }
-    
+    console.log(stream);
     $.ajax({
         url: 'http://127.0.0.1:3030/favstreams',
-        data: data,
+        data: stream,
         type: 'POST',
         success: (data) => {
-          this.setState({inputValue: ''});
+          console.log('sucess')
           this.fetch();
         },
         error: (data) => {
-          this.setState({inputValue: ''});
           console.log('Did not receive:' + data);
         }
     });
+  }
+
+  //Change Player
+  handlePlay(stream){
+    console.log(stream.stream.channel.name);
+    this.setState({currentChannel: stream.stream.channel.name})
   }
 }
 

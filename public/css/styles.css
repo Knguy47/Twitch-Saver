@@ -1,5 +1,12 @@
 div .twitchlinks {
-  font-size: 18px;
+  font-size: 15px;
   padding: 5px 5px 5px 5px;
 }
 
+button {
+  font-size: 12px;
+}
+
+iframe {
+  display: inline
+}

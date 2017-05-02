@@ -10,6 +10,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '/public')));
 // respond with "hello world" when a GET request is made to the homepage
+
 app.get('/favstreams', function (req, res) {
   FavStreams.find(function(err, streams) {
     if(err) {
@@ -20,12 +21,12 @@ app.get('/favstreams', function (req, res) {
   });
 });
 
-app.post('/favstreams', function (req, res) {
-  var streamTitle = req.body.title;
-  var streamUrl = req.body.url;
-  console.log(req.body.title);
 
-  new FavStreams ({title: streamTitle, url: streamUrl})
+
+app.post('/favstreams', function (req, res) {
+  console.log(req.body);
+  var addStream = req.body;
+  new FavStreams ({stream: addStream})
     .save(function(err){
       if(err){
         res.status(400).send('stream not saved');

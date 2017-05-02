@@ -2,8 +2,7 @@ var mongoose = require('mongoose');
 var autoIncrement = require('mongoose-auto-increment');
 
 var favStreamsSchema = mongoose.Schema({
-  title:  String,
-  url: String
+  stream: Object,
 });
 
 favStreamsSchema.plugin(autoIncrement.plugin, 'FavStreams');
