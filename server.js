@@ -36,6 +36,19 @@ app.post('/favstreams', function (req, res) {
     });
 });
 
+app.delete('/favstreams', function (req, res) {
+ 
+  var deleteStream = req.body._id;
+ console.log(deleteStream);
+  FavStreams.remove({_id: deleteStream}, function(err) {
+    if(err) {
+      res.status(400).send('You messed up');
+    } else {
+      res.status(200).send('Stream Deleted');
+    }
+  });
+});
+
 app.listen(3030, function(){
   console.log('Listing on http://127.0.0.1:3030/')
 });

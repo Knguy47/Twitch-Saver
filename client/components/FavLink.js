@@ -4,6 +4,7 @@ class FavLink extends React.Component {
     this.state = {};
 
     this.handlePlay = this.handlePlay.bind(this);
+    this.handleRemove = this.handleRemove.bind(this);
   };
   
   render() {
@@ -14,10 +15,14 @@ class FavLink extends React.Component {
       </a>
       <div>
        <button onClick={this.handlePlay}>Play Stream</button>
-       <button>Remove From Favorites</button>
+       <button onClick={this.handleRemove}>Remove From Favorites</button>
       </div>
     </div>
     );
+  }
+  
+  handleRemove(){
+    this.props.onRemove(this.props.stream);
   }
 
   handlePlay(){

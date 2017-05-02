@@ -2,7 +2,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentChannel: '',
+      currentChannel: 'summit1g',
       favStreams: [],
       topStreamData: [],
       inputValue: ''
@@ -10,6 +10,7 @@ class App extends React.Component {
 
     this.handleFavorite = this.handleFavorite.bind(this);
     this.handlePlay = this.handlePlay.bind(this);
+    this.handleRemove = this.handleRemove.bind(this);
   };
   
   render() {
@@ -17,7 +18,6 @@ class App extends React.Component {
     var player;
 
     if(this.state.topStreamData.length > 1){
-      this.setState({currentChannel: this.state.topStreamData[0].stream.channel.name})
      player = <TwitchPlayer channel={this.state.currentChannel}></TwitchPlayer>  
     }
     
@@ -30,12 +30,12 @@ class App extends React.Component {
         })}
       <h3>FAVORITE STREAMS</h3>
         {this.state.favStreams.map((streamFavs) =>{
-          return <FavLink key={streamFavs.stream._id} stream={streamFavs} onPlay={this.handlePlay}></FavLink>
+          return <FavLink key={streamFavs.stream._id} stream={streamFavs} onPlay={this.handlePlay} onRemove={this.handleRemove}></FavLink>
         })}
     </div>
     );
   }
-  //fetch the data from the Twitch 
+  //Fetch the data from the Twitch 
   fetchTop() {
     $.ajax({
       url: 'https://api.twitch.tv/kraken/streams/featured?limit=5',
@@ -54,18 +54,21 @@ class App extends React.Component {
     });
   }
 
-  //fetch the data from the DB
+  //Fetch the data from the DB
   fetch() {
     $.ajax({
       url: 'http://127.0.0.1:3030/favstreams',
       dataType: 'json',
       type: 'GET',
       success: (data) => {
+        console.log(data)
         var mappedData = data.map((stream) =>{
-          return stream.stream;
+          var newStream = stream.stream
+          newStream._id = stream._id;
+          return newStream
         });
-        console.log(mappedData);
-        this.setState({favStreams: mappedData})
+        console.log(JSON.stringify(mappedData));
+        this.setState({favStreams: mappedData});
       },
       error: (data) => {
         console.log('Did not receive:' + data);
@@ -77,16 +80,19 @@ class App extends React.Component {
     this.fetch();
     this.fetchTop();
   }
+  
+  componentWillReceiveProps(){
+     this.setState({currentChannel: this.state.topStreamData[0].stream.channel.name});
+  }
 
   //Add Favorite Stream to Database
   handleFavorite(stream){
-    console.log(stream);
     $.ajax({
         url: 'http://127.0.0.1:3030/favstreams',
         data: stream,
         type: 'POST',
         success: (data) => {
-          console.log('sucess')
+          console.log('success')
           this.fetch();
         },
         error: (data) => {
@@ -95,10 +101,25 @@ class App extends React.Component {
     });
   }
 
-  //Change Player
+  handleRemove(stream){
+    $.ajax({
+      url: 'http://127.0.0.1:3030/favstreams',
+      data: stream,
+      type: 'DELETE',
+      success: (data) => {
+        console.log('success')
+        this.fetch();
+      },
+      error: (data) => {
+        console.log('Did not receive:' + data);
+      }
+    });
+  }
+
+  //Change Current Player
   handlePlay(stream){
     console.log(stream.stream.channel.name);
-    this.setState({currentChannel: stream.stream.channel.name})
+    this.setState({currentChannel: stream.stream.channel.name});
   }
 }
 
