@@ -9,7 +9,7 @@ var FavStreams = require('./database/Model/favStreams.js');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, '/public')));
+app.use('/index', express.static(path.join(__dirname, '/public')));
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -18,8 +18,8 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.get('/login', function(req, res){
-  res.redirect("https://api.twitch.tv/kraken/oauth2/authorize?response_type=code&client_id=9r4gqveimjjp6yo5rwbxf7i6hby75l&redirect_uri=http://localhost:3030/&scope=chat_login&state=encodedededed")
+app.get('/', function(req, res) {
+  res.redirect("https://api.twitch.tv/kraken/oauth2/authorize?response_type=code&client_id=9r4gqveimjjp6yo5rwbxf7i6hby75l&redirect_uri=http://localhost:3030/index&force_verify=true&scope=chat_login&state=encodedededed")
 })
 
 app.get('/favstreams', function (req, res) {

@@ -1,0 +1,23 @@
+div .twitchlinks {
+  font-size: 14px;
+  padding: 2px 2px 2px 2px;
+}
+
+button {
+  font-size: 12px;
+  margin-right: 10px;
+}
+
+iframe {
+  float: left;
+  padding: 15px 15px 15px 15px
+}
+iframe .player{
+  float: left;
+  padding: 20px 20px 20px 20px;
+}
+
+img #onlinebutton{
+    max-width:50%;
+   max-height:50%;
+}
