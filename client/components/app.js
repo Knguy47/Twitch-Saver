@@ -3,20 +3,28 @@ class App extends React.Component {
     super(props);
     this.state = {
       favStreams: [],
-      topStreamData: window.fakeData.featured,
+      topStreamData: [],
       inputValue: ''
     };
 
     this.handleButtonClick = this.handleButtonClick.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleFavorite = this.handleFavorite.bind(this);
   };
   
   render() {
+    var player;
+
+    if(this.state.topStreamData.length > 1){
+     player = <TwitchPlayer channel={this.state.topStreamData[0].stream.channel.name}></TwitchPlayer>  
+    }
+    
     return (
     <div>
+      {player}
       <h3>TOP 5 STREAMS</h3>
         {this.state.topStreamData.map((streamLink) => {
-          return <TwitchLink key={streamLink.stream._id} stream={streamLink}></TwitchLink>
+          return <TwitchLink key={streamLink.stream._id} stream={streamLink} onFavorite={this.handleFavorite}></TwitchLink>
         })}
       <input onChange={this.handleInputChange} value={this.state.inputValue}></input>
       <button onClick={this.handleButtonClick}>Submit Your Favorite Stream</button>
@@ -42,6 +50,7 @@ class App extends React.Component {
       }
     });
   }
+
   fetch() {
     $.ajax({
       url: 'http://127.0.0.1:3030/favstreams',
@@ -85,6 +94,27 @@ class App extends React.Component {
 
   handleInputChange(event) {
     this.setState({inputValue: event.target.value});
+  }
+
+  handleFavorite(stream){
+    var data = {
+      title: stream.something,
+      url: stream.something
+    }
+    
+    $.ajax({
+        url: 'http://127.0.0.1:3030/favstreams',
+        data: data,
+        type: 'POST',
+        success: (data) => {
+          this.setState({inputValue: ''});
+          this.fetch();
+        },
+        error: (data) => {
+          this.setState({inputValue: ''});
+          console.log('Did not receive:' + data);
+        }
+    });
   }
 }
 
